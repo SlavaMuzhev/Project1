@@ -6,6 +6,9 @@ def get_mask_card_number(number: Union[str, int]) -> str:
     Видны первые 6 цифр и последние 4 цифры, остальные символы
     отображаются звездочками, номер разбит по блокам по 4 цифры, разделенным пробелами."""
     new_number = str(number)
+    if len(new_number) != 16:
+        raise ValueError("Номер карты должен содержать 16 цифр")
+
     mask_number = new_number[:6] + "******" + new_number[12:]
     return " ".join([mask_number[i : i + 4] for i in range(0, len(mask_number), 4)])
 
