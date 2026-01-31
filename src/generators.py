@@ -5,8 +5,6 @@ def filter_by_currency(transactions: List[Dict[str, Any]], currency: str) -> Ite
     """Функция принимает на вход список словарей, представляющих транзакции.
     Функция возвращает итератор, который поочередно выдает транзакции,
     где валюта операции соответствует заданной"""
-    if not isinstance(transactions, list):
-        raise TypeError("Ожидается список транзакций")
     for transaction in transactions:
         amount = transaction.get("operationAmount") or {}
         currency_data = amount.get("currency") or {}
@@ -19,8 +17,6 @@ def filter_by_currency(transactions: List[Dict[str, Any]], currency: str) -> Ite
 
 def transaction_descriptions(transactions: List[Dict[str, Any]]) -> Iterator[Dict[str, Any]]:
     """Генератор, который принимает список словарей с транзакциями и возвращает описание каждой операции по очереди"""
-    if not isinstance(transactions, list):
-        raise TypeError("Ожидается список транзакций")
     for transaction in transactions:
         transaction_description = transaction.get("description", "Error")
         if transaction_description == "Error":
