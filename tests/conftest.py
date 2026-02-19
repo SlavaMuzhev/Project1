@@ -1,3 +1,7 @@
+import json
+from pathlib import Path
+from typing import Any, Callable
+
 import pytest
 
 
@@ -130,3 +134,19 @@ def transaction_no_description() -> list:
             "to": "Счет 11776614605963066702",
         }
     ]
+
+
+@pytest.fixture
+def temp_json_file(tmp_path: Path) -> Callable[[Any, str], str]:
+    """Фикстура для создания временного JSON-файла"""
+
+    def _create_file(content: Any, name: str = "test.json") -> str:
+        file_path = tmp_path / name
+        with open(file_path, "w", encoding="utf-8") as f:
+            if isinstance(content, str):
+                f.write(content)
+            else:
+                json.dump(content, f)
+        return str(file_path)
+
+    return _create_file
