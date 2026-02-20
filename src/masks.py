@@ -1,10 +1,9 @@
 import logging
 from typing import Union
 
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler(filename="./logs/masks.log", mode="w",encoding="utf-8")
+file_handler = logging.FileHandler(filename="./logs/masks.log", mode="w", encoding="utf-8")
 file_formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 file_handler.setFormatter(file_formatter)
 logger.addHandler(file_handler)
@@ -21,7 +20,7 @@ def get_mask_card_number(number: Union[str, int]) -> str:
         raise ValueError("Номер карты должен содержать 16 цифр")
 
     mask_number = new_number[:6] + "******" + new_number[12:]
-    formatted_mask = " ".join([mask_number[i: i + 4] for i in range(0, len(mask_number), 4)])
+    formatted_mask = " ".join([mask_number[i : i + 4] for i in range(0, len(mask_number), 4)])
     logger.info("Номер карты успешно замаскирован")
     return formatted_mask
 
