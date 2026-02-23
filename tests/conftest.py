@@ -1,7 +1,9 @@
+import csv
 import json
 from pathlib import Path
 from typing import Any, Callable
 
+import pandas as pd
 import pytest
 
 
@@ -150,3 +152,23 @@ def temp_json_file(tmp_path: Path) -> Callable[[Any, str], str]:
         return str(file_path)
 
     return _create_file
+
+
+@pytest.fixture
+def temp_csv(tmp_path):
+    file_path = tmp_path / "test_data.csv"
+    data = [{"id": "1", "amount": "100", "currency": "RUB"}, {"id": "2", "amount": "200", "currency": "USD"}]
+    with open(file_path, mode="w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=data[0].keys())
+        writer.writeheader()
+        writer.writerows(data)
+    return file_path
+
+
+@pytest.fixture
+def temp_excel(tmp_path):
+    file_path = tmp_path / "test_data.xlsx"
+    data = [{"id": 1, "amount": 100, "currency": "RUB"}, {"id": 2, "amount": 200, "currency": "USD"}]
+    df = pd.DataFrame(data)
+    df.to_excel(file_path, index=False)
+    return file_path
