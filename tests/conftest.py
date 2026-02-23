@@ -155,7 +155,7 @@ def temp_json_file(tmp_path: Path) -> Callable[[Any, str], str]:
 
 
 @pytest.fixture
-def temp_csv(tmp_path):
+def temp_csv(tmp_path: Path) -> Path:
     file_path = tmp_path / "test_data.csv"
     data = [{"id": "1", "amount": "100", "currency": "RUB"}, {"id": "2", "amount": "200", "currency": "USD"}]
     with open(file_path, mode="w", encoding="utf-8", newline="") as f:
@@ -166,7 +166,7 @@ def temp_csv(tmp_path):
 
 
 @pytest.fixture
-def temp_excel(tmp_path):
+def temp_excel(tmp_path: Path) -> Path:
     file_path = tmp_path / "test_data.xlsx"
     data = [{"id": 1, "amount": 100, "currency": "RUB"}, {"id": 2, "amount": 200, "currency": "USD"}]
     df = pd.DataFrame(data)
