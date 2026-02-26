@@ -139,6 +139,46 @@ def transaction_no_description() -> list:
 
 
 @pytest.fixture
+def transaction_description_none() -> list:
+    return [
+        {
+            "id": 939719570,
+            "state": "EXECUTED",
+            "date": "2018-06-30T02:08:58.425572",
+            "operationAmount": {
+                "amount": "9824.07",
+                "currency": {
+                    "name": "USD",
+                },
+            },
+            "description": None,
+            "from": "Счет 75106830613657916952",
+            "to": "Счет 11776614605963066702",
+        }
+    ]
+
+
+@pytest.fixture
+def transaction_description_with_spec() -> list:
+    return [
+        {
+            "id": 939719570,
+            "state": "EXECUTED",
+            "date": "2018-06-30T02:08:58.425572",
+            "operationAmount": {
+                "amount": "9824.07",
+                "currency": {
+                    "name": "USD",
+                },
+            },
+            "description": "Оплата (МСК) + комиссия 1.5%",
+            "from": "Счет 75106830613657916952",
+            "to": "Счет 11776614605963066702",
+        }
+    ]
+
+
+@pytest.fixture
 def temp_json_file(tmp_path: Path) -> Callable[[Any, str], str]:
     """Фикстура для создания временного JSON-файла"""
 
