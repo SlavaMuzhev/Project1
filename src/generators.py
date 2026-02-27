@@ -8,10 +8,13 @@ def filter_by_currency(transactions: List[Dict[str, Any]], currency: str) -> Ite
     for transaction in transactions:
         amount = transaction.get("operationAmount") or {}
         currency_data = amount.get("currency") or {}
-        currency_code = currency_data.get("code", "Error")
-        if currency_code == "Error":
-            raise ValueError("В транзакции не указан код валюты")
-        elif currency_code == currency:
+        currency_code = currency_data.get("code")
+        if currency_code is None:
+            currency_code = transaction.get("currency_code")
+            # 3. Если код всё равно None (строка пустая или битая), просто пропускаем её
+        if currency_code is None:
+            continue
+        if str(currency_code).upper() == currency.upper():
             yield transaction
 
 

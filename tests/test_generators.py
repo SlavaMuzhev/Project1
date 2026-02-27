@@ -35,10 +35,10 @@ def test_filter_by_currency_no_transactions(no_transactions: list) -> None:
 
 
 def test_filter_by_currency_missing_code(transaction_no_code: list) -> None:
-    """Проверка: В транзакции не указан код валюты"""
+    """Проверка: Если в транзакции нет кода, она просто не попадает в выборку"""
     generator = filter_by_currency(transaction_no_code, "USD")
-    with pytest.raises(ValueError, match="В транзакции не указан код валюты"):
-        next(generator)
+    result = list(generator)
+    assert len(result) == 0
 
 
 def test_transaction_descriptions(transactions: list) -> None:
