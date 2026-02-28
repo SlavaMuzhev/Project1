@@ -1,14 +1,15 @@
 import os
 from pathlib import Path
-from src.utils import get_transactions_data
-from src.transaction_loader import reading_transactions_from_csv, reading_transactions_from_excel
-from src.processing import filter_by_state, sort_by_date
+
 from src.bank_operations import process_bank_search
-from src.widget import get_date, mask_account_card
 from src.generators import filter_by_currency
+from src.processing import filter_by_state, sort_by_date
+from src.transaction_loader import reading_transactions_from_csv, reading_transactions_from_excel
+from src.utils import get_transactions_data
+from src.widget import get_date, mask_account_card
 
 
-def main():
+def main() -> None:
     """
     Функция отвечает за основную логику проекта и связывает функциональности между собой
     """
@@ -22,17 +23,17 @@ def main():
         choice = input("Ваш выбор: ").strip()
 
         # Загрузка данных
-        if choice == '1':
+        if choice == "1":
             print("\nДля обработки выбран JSON-файл")
-            data = get_transactions_data(Path(os.path.join('data', 'operations.json')))
+            data = get_transactions_data(Path(os.path.join("data", "operations.json")))
             break
-        elif choice == '2':
+        elif choice == "2":
             print("\nДля обработки выбран CSV-файл")
-            data = reading_transactions_from_csv(Path(os.path.join('data', 'transactions.csv')))
+            data = reading_transactions_from_csv(Path(os.path.join("data", "transactions.csv")))
             break
-        elif choice == '3':
+        elif choice == "3":
             print("\nДля обработки выбран XLSX-файл")
-            data = reading_transactions_from_excel(Path(os.path.join('data', 'transactions_excel.xlsx')))
+            data = reading_transactions_from_excel(Path(os.path.join("data", "transactions_excel.xlsx")))
             break
         else:
             print("Ошибка: Неверный пункт меню")
@@ -44,21 +45,27 @@ def main():
     # Фильтрация по статусу
     valid_statuses = ["EXECUTED", "CANCELED", "PENDING"]
     while True:
-        status = input("\nВведите статус, по которому необходимо выполнить фильтрацию.\n"
-                       "Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n\n"
-                       "Ваш выбор: ").upper().strip()
+        status = (
+            input(
+                "\nВведите статус, по которому необходимо выполнить фильтрацию.\n"
+                "Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING\n\n"
+                "Ваш выбор: "
+            )
+            .upper()
+            .strip()
+        )
 
         if status in valid_statuses:
             data = filter_by_state(data, status)
-            print(f"Операции отфильтрованы по статусу \"{status}\"")
+            print(f'Операции отфильтрованы по статусу "{status}"')
             break
         else:
-            print(f"Статус операции \"{status}\" недоступен")
+            print(f'Статус операции "{status}" недоступен')
 
     # Сортировка по дате
     while True:
         is_sort = input("\nОтсортировать операции по дате? Да/Нет\nВаш выбор: ").lower()
-        if is_sort in ['да', 'нет']:
+        if is_sort in ["да", "нет"]:
             break
         print("Пожалуйста, ответьте 'Да' или 'Нет'")
     if is_sort == "да":
@@ -76,7 +83,7 @@ def main():
     # Фильтрация по валюте
     while True:
         is_rub = input("\nВыводить только рублевые транзакции? Да/Нет\nВаш выбор: ").lower()
-        if is_rub in ['да', 'нет']:
+        if is_rub in ["да", "нет"]:
             break
         print("Пожалуйста, введите 'Да' или 'Нет'")
 
@@ -86,8 +93,9 @@ def main():
     # Фильтрация по слову в описании
     while True:
         is_search = input(
-            "\nОтфильтровать список транзакций по определенному слову в описании? Да/Нет\nВаш выбор: ").lower()
-        if is_search in ['да', 'нет']:
+            "\nОтфильтровать список транзакций по определенному слову в описании? Да/Нет\nВаш выбор: "
+        ).lower()
+        if is_search in ["да", "нет"]:
             break
         print("Пожалуйста, введите 'Да' или 'Нет'")
     if is_search == "да":
@@ -106,12 +114,12 @@ def main():
     else:
         print(f"Всего банковских операций в выборке: {len(data)}\n")
         for transaction in data:
-            date = get_date(transaction.get("date"))
-            description = transaction.get('description', 'Нет описания транзакции')
-            from_val = transaction.get('from')
-            to_val = transaction.get('to')
-            from_info = str(from_val) if (from_val and str(from_val).lower() != 'nan') else ""
-            to_info = str(to_val) if (to_val and str(to_val).lower() != 'nan') else ""
+            date = get_date(transaction.get("date") or "")
+            description = transaction.get("description", "Нет описания транзакции")
+            from_val = transaction.get("from")
+            to_val = transaction.get("to")
+            from_info = str(from_val) if (from_val and str(from_val).lower() != "nan") else ""
+            to_info = str(to_val) if (to_val and str(to_val).lower() != "nan") else ""
             try:
                 if from_info:
                     mask_from_info = mask_account_card(from_info)
@@ -126,17 +134,17 @@ def main():
             except ValueError:
                 route = f"{from_info} -> {to_info}"
 
-            amount = transaction.get('operationAmount', {}).get('amount')
+            amount = transaction.get("operationAmount", {}).get("amount")
             if amount is None:
-                amount = transaction.get('amount')
-            currency = transaction.get('operationAmount', {}).get('currency', {}).get('name')
+                amount = transaction.get("amount")
+            currency = transaction.get("operationAmount", {}).get("currency", {}).get("name")
             if currency is None:
-                currency = transaction.get('currency_name')
-
+                currency = transaction.get("currency_name")
 
             print(f"{date} {description}")
             print(f"{route}")
             print(f"Сумма: {amount} {currency}\n")
+
 
 if __name__ == "__main__":
     main()

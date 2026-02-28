@@ -212,3 +212,18 @@ def temp_excel(tmp_path: Path) -> Path:
     df = pd.DataFrame(data)
     df.to_excel(file_path, index=False)
     return file_path
+
+
+@pytest.fixture
+def transactions_for_main() -> list:
+    return [
+        {
+            "id": 873106923,
+            "state": "EXECUTED",
+            "date": "2019-03-23T01:09:46.296404",
+            "operationAmount": {"amount": "43318.34", "currency": {"name": "руб.", "code": "RUB"}},
+            "description": "Перевод со счета на счет",
+            "from": "Счет 44812258784861134719",
+            "to": "Счет 74489636417521191160",
+        }
+    ]
