@@ -139,6 +139,46 @@ def transaction_no_description() -> list:
 
 
 @pytest.fixture
+def transaction_description_none() -> list:
+    return [
+        {
+            "id": 939719570,
+            "state": "EXECUTED",
+            "date": "2018-06-30T02:08:58.425572",
+            "operationAmount": {
+                "amount": "9824.07",
+                "currency": {
+                    "name": "USD",
+                },
+            },
+            "description": None,
+            "from": "Счет 75106830613657916952",
+            "to": "Счет 11776614605963066702",
+        }
+    ]
+
+
+@pytest.fixture
+def transaction_description_with_spec() -> list:
+    return [
+        {
+            "id": 939719570,
+            "state": "EXECUTED",
+            "date": "2018-06-30T02:08:58.425572",
+            "operationAmount": {
+                "amount": "9824.07",
+                "currency": {
+                    "name": "USD",
+                },
+            },
+            "description": "Оплата (МСК) + комиссия 1.5%",
+            "from": "Счет 75106830613657916952",
+            "to": "Счет 11776614605963066702",
+        }
+    ]
+
+
+@pytest.fixture
 def temp_json_file(tmp_path: Path) -> Callable[[Any, str], str]:
     """Фикстура для создания временного JSON-файла"""
 
@@ -172,3 +212,18 @@ def temp_excel(tmp_path: Path) -> Path:
     df = pd.DataFrame(data)
     df.to_excel(file_path, index=False)
     return file_path
+
+
+@pytest.fixture
+def transactions_for_main() -> list:
+    return [
+        {
+            "id": 873106923,
+            "state": "EXECUTED",
+            "date": "2019-03-23T01:09:46.296404",
+            "operationAmount": {"amount": "43318.34", "currency": {"name": "руб.", "code": "RUB"}},
+            "description": "Перевод со счета на счет",
+            "from": "Счет 44812258784861134719",
+            "to": "Счет 74489636417521191160",
+        }
+    ]
